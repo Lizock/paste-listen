@@ -1,33 +1,26 @@
-import { useState } from "react";
-import "./App.css";
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import PasteText from "./components/PasteText";
 
 export default function App() {
-  const [input, setInput] = useState("");
-  const [text, setText] = useState("");
+  const pages = ["Page1", "Page2", "Page3", "Page4", "Page5"];
 
   return (
-    <div style={{ padding: "20px", maxWidth: "700px", margin: "0 auto" }}>
-      <h1>Paste & Listen</h1>
-      <textarea
-        value={input}
-        onChange={(e) => setInput(e.target.value)}
-        placeholder="Paste or type your text here..."
-        style={{ width: "100%", height: "150px", marginBottom: "10px" }}
-      />
-      <div>
-        <button onClick={() => setText(input)} style={{ marginRight: "10px" }}>
-          Display Text
-        </button>
-        <button onClick={() => { setInput(""); setText(""); }}>
-          Clear
-        </button>
-      </div>
-      {text && (
-        <div style={{ marginTop: "20px" }}>
-          <h2>Your Text:</h2>
-          <p style={{ whiteSpace: "pre-wrap" }}>{text}</p>
-        </div>
-      )}
-    </div>
+    <Router>
+      <nav style={{ padding: "10px", textAlign: "center" }}>
+        {pages.map((p) => (
+          <Link key={p} to={`/${p}`} style={{ margin: "0 10px" }}>
+            {p}
+          </Link>
+        ))}
+      </nav>
+
+      <Routes>
+        {pages.map((p) => (
+          <Route key={p} path={`/${p}`} element={<PasteText pageId={p} />} />
+        ))}
+        <Route path="*" element={<div style={{textAlign: "center"}}><h2>Welcome! Choose a page above.</h2></div>} />
+      </Routes>
+    </Router>
   );
 }
