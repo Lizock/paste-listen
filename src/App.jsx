@@ -1,5 +1,4 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import PasteText from "./components/PasteText";
 
 export default function App() {
@@ -16,10 +15,22 @@ export default function App() {
       </nav>
 
       <Routes>
+        {/* Redirect root "/" to Page1 */}
+        <Route path="/" element={<Navigate to="/Page1" replace />} />
+
         {pages.map((p) => (
           <Route key={p} path={`/${p}`} element={<PasteText pageId={p} />} />
         ))}
-        <Route path="*" element={<div style={{textAlign: "center"}}><h2>Welcome! Choose a page above.</h2></div>} />
+
+        {/* Optional fallback for unknown routes */}
+        <Route
+          path="*"
+          element={
+            <div style={{ textAlign: "center" }}>
+              <h2>Page not found</h2>
+            </div>
+          }
+        />
       </Routes>
     </Router>
   );
