@@ -1,41 +1,34 @@
-// src/App.jsx
-import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
-import PasteText from "./components/PasteText";
+import { useState, useEffect } from "react";
 
 export default function App() {
-  const pages = ["Page1", "Page2", "Page3", "Page4", "Page5"];
+  const [text, setText] = useState("");
+
+  // Load from localStorage when app starts
+  useEffect(() => {
+    const savedText = localStorage.getItem("pasteListenText");
+    if (savedText) setText(savedText);
+  }, []);
+
+  // Save to localStorage whenever text changes
+  useEffect(() => {
+    localStorage.setItem("pasteListenText", text);
+  }, [text]);
+
+  const handleClear = () => setText("");
 
   return (
-    <Router>
-      {/* Navigation Links */}
-      <nav style={{ padding: "10px", textAlign: "center" }}>
-        {pages.map((p) => (
-          <Link key={p} to={`/${p}`} style={{ margin: "0 10px" }}>
-            {p}
-          </Link>
-        ))}
-      </nav>
-
-      {/* Routes */}
-      <Routes>
-        {/* 1️⃣ Redirect root "/" to Page1 */}
-        <Route path="/" element={<Navigate to="/Page1" replace />} />
-
-        {/* 2️⃣ Define the 5 pages */}
-        {pages.map((p) => (
-          <Route key={p} path={`/${p}`} element={<PasteText pageId={p} />} />
-        ))}
-
-        {/* 3️⃣ Optional fallback for unknown routes */}
-        <Route
-          path="*"
-          element={
-            <div style={{ textAlign: "center" }}>
-              <h2>Page not found</h2>
-            </div>
-          }
-        />
-      </Routes>
-    </Router>
+    <div style={{ padding: "20px", maxWidth: "600px", margin: "auto" }}>
+      <h1>Paste & Listen</h1>
+      <textarea
+        style={{ width: "100%", height: "300px", fontSize: "16px" }}
+        placeholder="Paste your text here..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+      />
+      <div style={{ marginTop: "10px" }}>
+        <button onClick={handleClear}>Clear Text</button>
+      </div>
+      <p style={{ marginTop: "20px", whiteSpace: "pre-wrap" }}>{text}</p>
+    </div>
   );
 }
