@@ -1,3 +1,4 @@
+// src/App.jsx
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from "react-router-dom";
 import PasteText from "./components/PasteText";
 
@@ -6,6 +7,7 @@ export default function App() {
 
   return (
     <Router>
+      {/* Navigation Links */}
       <nav style={{ padding: "10px", textAlign: "center" }}>
         {pages.map((p) => (
           <Link key={p} to={`/${p}`} style={{ margin: "0 10px" }}>
@@ -14,15 +16,17 @@ export default function App() {
         ))}
       </nav>
 
+      {/* Routes */}
       <Routes>
-        {/* Redirect root "/" to Page1 */}
+        {/* 1️⃣ Redirect root "/" to Page1 */}
         <Route path="/" element={<Navigate to="/Page1" replace />} />
 
+        {/* 2️⃣ Define the 5 pages */}
         {pages.map((p) => (
           <Route key={p} path={`/${p}`} element={<PasteText pageId={p} />} />
         ))}
 
-        {/* Optional fallback for unknown routes */}
+        {/* 3️⃣ Optional fallback for unknown routes */}
         <Route
           path="*"
           element={
